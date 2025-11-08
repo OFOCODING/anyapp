@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Bell, User, Plus, Heart, MessageCircle, Send, Bookmark, Home, Search, Compass } from 'lucide-react';
@@ -54,7 +53,7 @@ const ReelsScreen = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header - Responsive */}
+      {/* Header */}
       <div className="bg-white shadow-sm sticky top-0 z-20">
         <div className="px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
@@ -90,7 +89,7 @@ const ReelsScreen = () => {
         </div>
       </div>
 
-      {/* Stories - Responsive scroll */}
+      {/* Stories */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 scrollbar-hide">
           <button className="flex flex-col items-center gap-2 flex-shrink-0">
@@ -119,11 +118,10 @@ const ReelsScreen = () => {
         </div>
       </div>
 
-      {/* Feed - Responsive spacing and layout */}
+      {/* Feed */}
       <div className="space-y-4 sm:space-y-6 py-4">
         {posts.map((post) => (
           <div key={post.id} className="bg-white shadow-sm">
-            {/* Post Header */}
             <div className="flex items-center justify-between px-4 sm:px-6 py-4">
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-xl sm:text-2xl shadow-md flex-shrink-0">
@@ -142,7 +140,6 @@ const ReelsScreen = () => {
               </button>
             </div>
 
-            {/* Post Image - Responsive height */}
             <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 cursor-pointer hover:opacity-95 transition-opacity"
                  style={{ height: 'clamp(300px, 50vh, 500px)' }}>
               <div className="w-full h-full flex items-center justify-center">
@@ -150,7 +147,6 @@ const ReelsScreen = () => {
               </div>
             </div>
 
-            {/* Post Actions - Responsive sizing */}
             <div className="px-4 sm:px-6 py-4">
               <div className="flex items-center gap-4 sm:gap-6 mb-3">
                 <button 
@@ -205,40 +201,48 @@ const ReelsScreen = () => {
         ))}
       </div>
 
-      {/* Bottom Navigation - UPDATED WITH FAVORITES */}
+      {/* Bottom Navigation - WITH CHAT */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-100 shadow-2xl lg:hidden">
         <div className="max-w-md mx-auto flex justify-around py-3">
           <button 
             onClick={() => navigate('/map')} 
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all"
           >
-            <Home size={24} className="text-gray-400" strokeWidth={2} />
-            <span className="text-xs text-gray-500">Home</span>
+            <Home size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Home</span>
           </button>
           <button 
-            onClick={() => navigate('/reels')}
-className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl bg-blue-50"
->
-<Compass size={24} className="text-blue-600" strokeWidth={2.5} />
-<span className="text-xs font-bold text-blue-600">Explore</span>
-</button>
-<button
-onClick={() => navigate('/favorites')}
-className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
->
-<Heart size={24} className="text-gray-400" strokeWidth={2} />
-<span className="text-xs text-gray-500">Favorites</span>
-</button>
-<button
-onClick={() => navigate('/profile')}
-className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
->
-<User size={24} className="text-gray-400" strokeWidth={2} />
-<span className="text-xs text-gray-500">Profile</span>
-</button>
-</div>
-</div>
-</div>
-);
+            onClick={() => navigate('/reels')} 
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl bg-blue-50"
+          >
+            <Compass size={22} className="text-blue-600" strokeWidth={2.5} />
+            <span className="text-[10px] sm:text-xs font-bold text-blue-600">Explore</span>
+          </button>
+          <button 
+            onClick={() => navigate('/chat')}
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all"
+          >
+            <MessageCircle size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Chat</span>
+          </button>
+          <button 
+            onClick={() => navigate('/favorites')}
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all"
+          >
+            <Heart size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Favorites</span>
+          </button>
+          <button 
+            onClick={() => navigate('/profile')} 
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all"
+          >
+            <User size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Profile</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
+
 export default ReelsScreen;

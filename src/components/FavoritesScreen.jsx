@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, MapPin, ArrowLeft, Home, Compass, User, Trash2 } from 'lucide-react';
+import { Heart, MapPin, ArrowLeft, Home, Compass, User, Trash2, MessageCircle } from 'lucide-react';
 
 const FavoritesScreen = () => {
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    // Get favorites from localStorage
     const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     setFavorites(savedFavorites);
   }, []);
@@ -140,36 +139,43 @@ const FavoritesScreen = () => {
         )}
       </div>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation - WITH CHAT */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-100 shadow-2xl lg:hidden">
         <div className="max-w-md mx-auto flex justify-around py-3">
           <button 
             onClick={() => navigate('/map')} 
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all"
           >
-            <Home size={24} className="text-gray-400" strokeWidth={2} />
-            <span className="text-xs text-gray-500">Home</span>
+            <Home size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Home</span>
           </button>
           <button 
             onClick={() => navigate('/reels')} 
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all"
           >
-            <Compass size={24} className="text-gray-400" strokeWidth={2} />
-            <span className="text-xs text-gray-500">Explore</span>
+            <Compass size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Explore</span>
+          </button>
+          <button 
+            onClick={() => navigate('/chat')}
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all"
+          >
+            <MessageCircle size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Chat</span>
           </button>
           <button 
             onClick={() => navigate('/favorites')}
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl bg-pink-50"
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl bg-pink-50"
           >
-            <Heart size={24} className="text-pink-600" strokeWidth={2.5} />
-            <span className="text-xs font-bold text-pink-600">Favorites</span>
+            <Heart size={22} className="text-pink-600" strokeWidth={2.5} />
+            <span className="text-[10px] sm:text-xs font-bold text-pink-600">Favorites</span>
           </button>
           <button 
             onClick={() => navigate('/profile')} 
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all"
           >
-            <User size={24} className="text-gray-400" strokeWidth={2} />
-            <span className="text-xs text-gray-500">Profile</span>
+            <User size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Profile</span>
           </button>
         </div>
       </div>

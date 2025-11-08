@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Search, MapPin, Bell, Home, Compass, Heart, User, Menu, Navigation } from 'lucide-react';
+import { Search, MapPin, Bell, Home, Compass, Heart, User, Menu, Navigation, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -40,7 +40,7 @@ function RecenterMap({ center }) {
 const MapScreen = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [userLocation, setUserLocation] = useState([40.7128, -74.0060]); // Default: NYC
+  const [userLocation, setUserLocation] = useState([40.7128, -74.0060]);
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
 
@@ -54,7 +54,6 @@ const MapScreen = () => {
   ];
 
   useEffect(() => {
-    // Get user's real location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -70,7 +69,6 @@ const MapScreen = () => {
       setLoading(false);
     }
 
-    // Get unread notification count
     updateNotificationCount();
   }, []);
 
@@ -100,7 +98,7 @@ const MapScreen = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Header - Responsive */}
+      {/* Header */}
       <div className="bg-white shadow-sm sticky top-0 z-[1000]">
         <div className="px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between mb-4">
@@ -133,7 +131,6 @@ const MapScreen = () => {
             </div>
           </div>
           
-          {/* Clickable Search Bar */}
           <div 
             className="relative cursor-pointer" 
             onClick={() => navigate('/search')}
@@ -152,7 +149,38 @@ const MapScreen = () => {
         </div>
       </div>
 
-      {/* Real Map Section */}
+      {/* REMINDERS BANNER - NEW ADDITION */}
+      {(() => {
+        const reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
+        const upcomingReminders = reminders.filter(r => new Date(r.date) > new Date()).length;
+        
+        if (upcomingReminders > 0) {
+          return (
+            <div 
+              onClick={() => navigate('/reminders')}
+              className="mx-4 sm:mx-6 lg:mx-8 mt-4 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-4 shadow-lg cursor-pointer hover:shadow-xl transition-all animate-fadeIn"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                  <Bell className="text-white" size={24} />
+                </div>
+                <div className="flex-1 text-white">
+                  <h3 className="font-bold text-base sm:text-lg">
+                    You have {upcomingReminders} reminder{upcomingReminders > 1 ? 's' : ''}!
+                  </h3>
+                  <p className="text-xs sm:text-sm text-orange-100">
+                    Tap to view your upcoming reminders
+                  </p>
+                </div>
+                <div className="text-white text-2xl">›</div>
+              </div>
+            </div>
+          );
+        }
+        return null;
+      })()}
+
+      {/* Map Section */}
       <div className="relative mx-4 sm:mx-6 lg:mx-8 mt-4 rounded-3xl overflow-hidden shadow-2xl border-4 border-white" 
            style={{ height: 'clamp(320px, 45vh, 450px)' }}>
         {loading ? (
@@ -176,7 +204,6 @@ const MapScreen = () => {
             
             <RecenterMap center={userLocation} />
             
-            {/* User Location Marker */}
             <Marker position={userLocation} icon={userIcon}>
               <Popup>
                 <div className="text-center p-2">
@@ -186,7 +213,6 @@ const MapScreen = () => {
               </Popup>
             </Marker>
             
-            {/* Store Markers */}
             {stores.map((store) => (
               <Marker key={store.id} position={[store.lat, store.lng]} icon={storeIcon}>
                 <Popup>
@@ -216,7 +242,6 @@ const MapScreen = () => {
           </MapContainer>
         )}
         
-        {/* Locate Me Button */}
         <button 
           onClick={handleLocateMe}
           className="absolute bottom-4 right-4 w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-full shadow-xl hover:shadow-2xl transition-all hover:scale-110 active:scale-95 flex items-center justify-center group z-[500]"
@@ -224,7 +249,6 @@ const MapScreen = () => {
           <Navigation className="text-blue-500 group-hover:text-blue-600" size={24} strokeWidth={2.5} />
         </button>
 
-        {/* Map Legend */}
         <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-3 z-[500]">
           <div className="flex items-center gap-2 text-sm mb-2">
             <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
@@ -237,7 +261,7 @@ const MapScreen = () => {
         </div>
       </div>
 
-      {/* Nearby Stores Section - Responsive grid */}
+      {/* Nearby Stores Section */}
       <div className="px-4 sm:px-6 lg:px-8 pt-6 pb-24">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg sm:text-xl font-bold text-gray-900">Nearby Stores</h3>
@@ -284,36 +308,43 @@ const MapScreen = () => {
         </button>
       </div>
 
-      {/* Bottom Navigation - UPDATED WITH FAVORITES */}
+      {/* Bottom Navigation - WITH CHAT */}
       <div className="fixed lg:relative bottom-0 left-0 right-0 bg-white border-t-2 border-gray-100 shadow-2xl lg:shadow-none z-[999]">
         <div className="max-w-7xl mx-auto flex justify-around py-3">
           <button 
             onClick={() => navigate('/map')} 
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl bg-blue-50"
+            className="flex flex-col items-center gap-1 px-3 sm:px-4 py-2 rounded-xl bg-blue-50"
           >
-            <Home size={24} className="text-blue-600" strokeWidth={2.5} />
-            <span className="text-xs font-bold text-blue-600">Home</span>
+            <Home size={22} className="text-blue-600" strokeWidth={2.5} />
+            <span className="text-[10px] sm:text-xs font-bold text-blue-600">Home</span>
           </button>
           <button 
             onClick={() => navigate('/reels')} 
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
+            className="flex flex-col items-center gap-1 px-3 sm:px-4 py-2 rounded-xl hover:bg-gray-50 transition-all"
           >
-            <Compass size={24} className="text-gray-400" strokeWidth={2} />
-            <span className="text-xs text-gray-500">Explore</span>
+            <Compass size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Explore</span>
+          </button>
+          <button 
+            onClick={() => navigate('/chat')}
+            className="flex flex-col items-center gap-1 px-3 sm:px-4 py-2 rounded-xl hover:bg-gray-50 transition-all"
+          >
+            <MessageCircle size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Chat</span>
           </button>
           <button 
             onClick={() => navigate('/favorites')}
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
+            className="flex flex-col items-center gap-1 px-3 sm:px-4 py-2 rounded-xl hover:bg-gray-50 transition-all"
           >
-            <Heart size={24} className="text-gray-400" strokeWidth={2} />
-            <span className="text-xs text-gray-500">Favorites</span>
+            <Heart size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Favorites</span>
           </button>
           <button 
             onClick={() => navigate('/profile')} 
-            className="flex flex-col items-center gap-1 px-4 sm:px-6 py-2 rounded-xl hover:bg-gray-50 transition-all"
+            className="flex flex-col items-center gap-1 px-3 sm:px-4 py-2 rounded-xl hover:bg-gray-50 transition-all"
           >
-            <User size={24} className="text-gray-400" strokeWidth={2} />
-            <span className="text-xs text-gray-500">Profile</span>
+            <User size={22} className="text-gray-400" strokeWidth={2} />
+            <span className="text-[10px] sm:text-xs text-gray-500">Profile</span>
           </button>
         </div>
       </div>

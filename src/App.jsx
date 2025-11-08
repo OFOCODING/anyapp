@@ -11,6 +11,7 @@ import NotificationsScreen from './components/NotificationsScreen';
 import SearchScreen from './components/SearchScreen';
 import FavoritesScreen from './components/FavoritesScreen';
 import SettingsScreen from './components/SettingsScreen';
+import RemindersScreen from './components/RemindersScreen';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/search" element={<SearchScreen />} />
                 <Route path="/favorites" element={<FavoritesScreen />} />
                 <Route path="/settings" element={<SettingsScreen />} />
+                <Route path="/reminders" element={<RemindersScreen />} />
               </Routes>
             </div>
             
